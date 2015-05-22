@@ -11,5 +11,7 @@
 
 ### run migrations with `python manage.py migrate`
 
+### run tests with `python manage.py migrate`
+
 ### start server with `python manage.py runserver`
 
