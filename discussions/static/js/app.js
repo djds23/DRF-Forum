@@ -68,8 +68,6 @@ var Home = {
                     m("p", description_text),
                 ]);
             }),
-            m("br"),
-
         ]);
     },
 }
@@ -77,7 +75,7 @@ var Home = {
 var DiscussionDetail = {
     controller: function() {
         function submitComment(e) {
-            e.preventDefault()
+            e.preventDefault();
 
             var formObject = {
                 discussion: m.route.param("discussionId"),
@@ -85,8 +83,7 @@ var DiscussionDetail = {
             var fields = document.querySelectorAll("[id^='comment-'");
             Array.prototype.slice.call(fields).map(function (field) {
                 formObject[field.id.slice(8)] = field.value;
-                field.value="";
-            })
+            });
             Comment.save(formObject).then(function(){
                 m.mount(document.getElementById("container"), DiscussionDetail);
             });
@@ -119,7 +116,7 @@ var DiscussionDetail = {
         var discussion = ctrl.discussion()[0];
         discussion.comment_set.sort(function(a, b) {
             return b.score - a.score;
-        })
+        });
         return m("div", [
             m("h1", discussion.title),
             m("br"),
