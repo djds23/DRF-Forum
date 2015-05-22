@@ -153,8 +153,8 @@ var NewDiscussion = {
             Discussion.save(formObject).then(function(){
                 m.route("/");
             });
-
         }
+
         return {
             submit: submitDiscussion,
         };
@@ -172,7 +172,6 @@ var NewDiscussion = {
             m("br"),
         ]);
     }
-
 }
 
 m.route(document.getElementById("container"), "/", {

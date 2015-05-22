@@ -29,7 +29,6 @@ class Comment(TimeStampedModel):
     username = models.CharField(
         default="Anonymous",
         max_length=255,
-        null=True,
         blank=True,
     )
 
