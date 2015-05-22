@@ -1,8 +1,4 @@
-//var m = require('m')
-
-
 // Models
-
 var Discussion = {
     list: function() {
         return m.request({
@@ -48,7 +44,6 @@ var Comment = {
 }
 
 // Views & Controllers
-
 var Home = {
     controller: function() {
         var discussions = Discussion.list();
@@ -158,8 +153,7 @@ var NewDiscussion = {
                 field.value="";
             })
             Discussion.save(formObject);
-            var submitted = document.querySelector('#confirm')
-            submitted.style.display= "inline";
+            m.mount(document.getElementById("container"), Home);
         }
         return {
             submit: submitDiscussion,
