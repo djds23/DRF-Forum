@@ -58,10 +58,12 @@ var Home = {
     },
 
     view: function(ctrl) {
-        return m("ul", "Read a discussion or ",[
-            m("a", {href: "/new/discussion", config: m.route}, "Start a discussion"),
-            m("br"),
-            m("br"),
+        return m("div", [
+            m("h1", "Discussion Forum"),
+            m("p", "Join a conversation or ", [
+                m("a", {href: "/new/discussion", config: m.route}, "start a discussion"),
+            ]),
+            m("ul"),
             ctrl.discussions().map(function(discussion) {
                 var href ="[href='/discussion/" + discussion.id + "']"
                 return m("li", [
@@ -89,8 +91,7 @@ var DiscussionDetail = {
                 field.value="";
             })
             Comment.save(formObject);
-            var submitted = document.querySelector('#confirm');
-            submitted.style.display= "inline";
+            m.mount(document.getElementById("container"), DiscussionDetail);
         }
         function upVote(e) {
             var comment_id = e.target.dataset.id;
@@ -119,7 +120,11 @@ var DiscussionDetail = {
     },
     view: function(ctrl) {
         var discussion = ctrl.discussion()[0];
-        return m("div", discussion.title, [
+        discussion.comment_set = discussion.comment_set.sort(function(a, b) {
+            return b.score - a.score;
+        })
+        return m("div", [
+            m("h1", discussion.title),
             m("br"),
             m("p", discussion.description),
             m("textarea", {id:"comment-text", placeholder: "Type your comment here"}),
@@ -162,6 +167,7 @@ var NewDiscussion = {
     },
     view: function (ctrl) {
         return m("div", [
+            m("h1", "Start a Conversation"),
             m("input", {id: "discussion-title", placeholder: "Title"}),
             m("br"),
             m("input", {id: "discussion-username", placeholder: "Anonymous"}),

@@ -8,7 +8,9 @@ class Discussion(TimeStampedModel):
         max_length=255
     )
     username = models.CharField(
-        max_length=255
+        default="Anonymous",
+        max_length=255,
+        blank=True,
     )
     description = models.CharField(
         max_length=1500
