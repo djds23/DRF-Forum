@@ -80,7 +80,7 @@ var DiscussionDetail = {
             var formObject = {
                 discussion: m.route.param("discussionId"),
             };
-            var fields = document.querySelectorAll("[id^='comment-'");
+            var fields = document.querySelectorAll("[id^='comment-']");
             Array.prototype.slice.call(fields).map(function (field) {
                 formObject[field.id.slice(8)] = field.value;
             });
@@ -146,7 +146,7 @@ var NewDiscussion = {
             e.preventDefault();
 
             var formObject = {};
-            var fields = document.querySelectorAll("[id^='discussion-'");
+            var fields = document.querySelectorAll("[id^='discussion-']");
             Array.prototype.slice.call(fields).map(function (field) {
                 formObject[field.id.slice(11)] = field.value;
             });
