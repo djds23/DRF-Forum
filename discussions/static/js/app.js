@@ -49,7 +49,7 @@ var Home = {
         var discussions = Discussion.list();
         return {
             discussions: discussions,
-        }
+        };
     },
 
     view: function(ctrl) {
@@ -60,10 +60,12 @@ var Home = {
             ]),
             m("ul"),
             ctrl.discussions().map(function(discussion) {
+                var username = discussion.username.length ? discussion.username : "Anonymous";
+                var description_text = "Description: " + discussion.description + "\n started by " + username;
                 var href ="[href='/discussion/" + discussion.id + "']"
                 return m("li", [
                     m("a" + href, {config: m.route}, discussion.title),
-                    m("p", discussion.description)
+                    m("p", description_text),
                 ]);
             }),
             m("br"),
@@ -92,20 +94,14 @@ var DiscussionDetail = {
         }
         function upVote(e) {
             var comment_id = e.target.dataset.id;
-            var score_id = "score-" + comment_id;
-            var submitted = document.getElementById(score_id);
-            submitted.innerHTML = parseInt(submitted.innerHTML) + 1;
-            return Comment.vote('up', comment_id).then(function(){
+            Comment.vote('up', comment_id).then(function(){
                 m.mount(document.getElementById("container"), DiscussionDetail);
             });
         }
 
         function downVote(e) {
             var comment_id = e.target.dataset.id;
-            var score_id = "score-" + comment_id;
-            var submitted = document.getElementById(score_id);
-            submitted.innerHTML = parseInt(submitted.innerHTML) - 1;
-            return Comment.vote('down', comment_id).then(function(){
+            Comment.vote('down', comment_id).then(function(){
                 m.mount(document.getElementById("container"), DiscussionDetail);
             });
         }
@@ -121,7 +117,7 @@ var DiscussionDetail = {
     },
     view: function(ctrl) {
         var discussion = ctrl.discussion()[0];
-        discussion.comment_set = discussion.comment_set.sort(function(a, b) {
+        discussion.comment_set.sort(function(a, b) {
             return b.score - a.score;
         })
         return m("div", [
@@ -133,15 +129,15 @@ var DiscussionDetail = {
             m("input", {id: "comment-username", placeholder: "Anonymous"}),
             m("button", {onclick: ctrl.submit}, "Post Comment"),
             m("p", {style: "display: none;", id: "confirm"}, "Your discussion has been submitted!"),
-            m("ul", "Comments", discussion.comment_set.map(function(comment) {
+            m("ul", discussion.comment_set.map(function(comment) {
                 var username = comment.username.length ? comment.username : "Anonymous";
                 return m("li", [
                     m("span", {style: "font-weight: bold;"}, username),
                     m("p", comment.text),
                     m("button", {onclick: ctrl.upVote, 'data-id': comment.id}, "UpVote"),
                     m("button", {onclick: ctrl.downVote, 'data-id': comment.id}, "DownVote"),
-                    m("span", {id: "score-" + comment.id, style: "padding: 10px;"}, comment.score)
-                ])
+                    m("span", {style: "padding: 10px;"}, comment.score)
+                ]);
             }))
         ]);
     },
@@ -150,17 +146,16 @@ var DiscussionDetail = {
 var NewDiscussion = {
     controller: function() {
         function submitDiscussion(e) {
-            e.preventDefault()
+            e.preventDefault();
 
             var formObject = {};
             var fields = document.querySelectorAll("[id^='discussion-'");
             Array.prototype.slice.call(fields).map(function (field) {
                 formObject[field.id.slice(11)] = field.value;
-                field.value="";
-            })
+            });
             Discussion.save(formObject).then(function(){
-                m.mount(document.getElementById("container"), Home);
-            });;
+                m.route("/");
+            });
 
         }
         return {
@@ -178,10 +173,7 @@ var NewDiscussion = {
             m("br"),
             m("button", {onclick: ctrl.submit}, "Create Discussion"),
             m("br"),
-            m("a", {href: "/", c: m.route}, "Return to the Homepage"),
-            m("br"),
-            m("p", {style: "display: none;", id: "confirm"}, "Your discussion has been submitted!"),
-        ])
+        ]);
     }
 
 }
