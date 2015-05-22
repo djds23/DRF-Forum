@@ -85,15 +85,19 @@ var DiscussionDetail = {
                 formObject[field.id.slice(8)] = field.value;
                 field.value="";
             })
-            Comment.save(formObject);
-            m.mount(document.getElementById("container"), DiscussionDetail);
+            Comment.save(formObject).then(function(){
+                m.mount(document.getElementById("container"), DiscussionDetail);
+            });
+
         }
         function upVote(e) {
             var comment_id = e.target.dataset.id;
             var score_id = "score-" + comment_id;
             var submitted = document.getElementById(score_id);
             submitted.innerHTML = parseInt(submitted.innerHTML) + 1;
-            return Comment.vote('up', comment_id);
+            return Comment.vote('up', comment_id).then(function(){
+                m.mount(document.getElementById("container"), DiscussionDetail);
+            });
         }
 
         function downVote(e) {
@@ -101,7 +105,9 @@ var DiscussionDetail = {
             var score_id = "score-" + comment_id;
             var submitted = document.getElementById(score_id);
             submitted.innerHTML = parseInt(submitted.innerHTML) - 1;
-            return Comment.vote('down', comment_id);
+            return Comment.vote('down', comment_id).then(function(){
+                m.mount(document.getElementById("container"), DiscussionDetail);
+            });
         }
 
         var discussion = Discussion.detail(m.route.param("discussionId"));
@@ -147,13 +153,15 @@ var NewDiscussion = {
             e.preventDefault()
 
             var formObject = {};
-            var fields = document.querySelectorAll("input[id^='discussion-'");
+            var fields = document.querySelectorAll("[id^='discussion-'");
             Array.prototype.slice.call(fields).map(function (field) {
                 formObject[field.id.slice(11)] = field.value;
                 field.value="";
             })
-            Discussion.save(formObject);
-            m.mount(document.getElementById("container"), Home);
+            Discussion.save(formObject).then(function(){
+                m.mount(document.getElementById("container"), Home);
+            });;
+
         }
         return {
             submit: submitDiscussion,
@@ -166,7 +174,7 @@ var NewDiscussion = {
             m("br"),
             m("input", {id: "discussion-username", placeholder: "Anonymous"}),
             m("br"),
-            m("input", {id: "discussion-description", placeholder: "Description"}),
+            m("textarea", {id: "discussion-description", placeholder: "Description"}),
             m("br"),
             m("button", {onclick: ctrl.submit}, "Create Discussion"),
             m("br"),
