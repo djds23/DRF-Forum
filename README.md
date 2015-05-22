@@ -1,6 +1,6 @@
 # Small forum app using Mithril.js & django-rest-framework
 
-### Tested with node 0.10 & python 2.7 on OSX 10.10
+### Tested with sqlite3, node 0.12 & python 2.7 on OSX 10.10
 
 ### start from a fresh virutalenv & clone this repo
 
