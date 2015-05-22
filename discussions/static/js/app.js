@@ -61,7 +61,7 @@ var Home = {
             m("ul"),
             ctrl.discussions().map(function(discussion) {
                 var username = discussion.username.length ? discussion.username : "Anonymous";
-                var description_text = "Description: " + discussion.description + "\n started by " + username;
+                var description_text = "Description: " + discussion.description + " started by " + username;
                 var href ="[href='/discussion/" + discussion.id + "']"
                 return m("li", [
                     m("a" + href, {config: m.route}, discussion.title),
